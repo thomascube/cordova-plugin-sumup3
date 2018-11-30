@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  id="cordova-plugin-sumup3"
+  version="1.0.0">
+
+  <engines>
+    <engine name="cordova" version=">=3.0.0" />
+    <engine name="cordova-android" version=">=3.0.0" />
+  </engines>
+
+  <name>Sumup</name>
+  <description>Cordova Sumup Plugin</description>
+  <license>Apache 2.0</license>
+  <keywords>cordova,sumup</keywords>
+  <author>thomascube</author>
+
+  <preference name="SUMUP_API_KEY" />
+
+  <asset src="www/sumup.js" target="js/sumup.js"/>
+
+  <js-module src="www/sumup.js" name="Sumup">
+    <clobbers target="cordova.Sumup" />
+  </js-module>
+
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="Sumup">
+        <param name="android-package" value="com.sumup.cordova.plugins.Sumup" />
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+    <config-file target="./res/values/strings.xml" parent="/resources">
+      <string name="SUMUP_API_KEY">$SUMUP_API_KEY</string>
+    </config-file>
+
+    <resource-file src="src/android/sdksumup/merchant-sdk-2.3.0.aar" target="libs/merchant-sdk-2.3.0.aar" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <source-file src="src/android/Sumup.java" target-dir="src/com/sumup/cordova/plugins" />
+    <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
+  </platform>
+
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="Sumup">
+        <param name="ios-package" value="CDVSumup"/>
+      </feature>
+    </config-file>
+
+    <config-file target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+      <string>Required for secure payment using a SumUp card reader. Without location information, you cannot accept payments using this app.</string>
+    </config-file>
+    <config-file target="*-Info.plist" parent="NSBluetoothPeripheralUsageDescription">
+      <string>Required to connect with SumUp card reader. If denied, you cannot use your card reader.</string>
+    </config-file>
+    <config-file target="*-Info.plist" parent="NSMicrophoneUsageDescription">
+      <string>Access to the microphone or your audio jack is required for the SumUp card reader to be detected correctly. If denied, you cannot use your card reader.</string>
+    </config-file>
+
+    <!-- add when using Air Register
+    <config-file target="*-Info.plist" parent="UISupportedExternalAccessoryProtocols">
+      <array>
+        <string>com.sumup.control</string>
+        <string>com.sumup.printing</string>
+        <string>com.sumup.air_data</string>
+      </array>
+    </config-file>
+    -->
+    <config-file target="*-Info.plist" parent="SUMUP_API_KEY">
+      <string>$SUMUP_API_KEY</string>
+    </config-file>
+
+    <header-file src="src/ios/CDVSumup.h" />
+    <source-file src="src/ios/CDVSumup.m" />
+
+    <framework src="src/ios/SumupSDK.embeddedframework/SumupSDK.framework" custom="true" />
+    <framework src="src/ios/SumUpSDK.embeddedframework/Resources/SMPSharedResources.bundle" custom="true" embed="true" />
+    <framework src="AVFoundation.framework" weak="true" />
+    <framework src="Accelerate.framework"  weak="true"/>
+    <framework src="MapKit.framework" weak="true" />
+    <framework src="ExternalAccessory.framework" weak="true" />
+  </platform>
+</plugin>

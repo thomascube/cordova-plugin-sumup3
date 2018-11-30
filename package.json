@@ -1,0 +1,15 @@
+{
+  "name": "cordova-plugin-sumup3",
+  "version": "1.2.0",
+  "description": "Cordova plugin for native acces to the Sumup SDK version 3.x",
+  "cordova": {
+    "id": "cordova-plugin-sumup3",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "author": "Thomas Bruederli <t.bruederli@nexbyte.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/thomascube/cordova-plugin-sumup3"
+}
