@@ -6,7 +6,7 @@
 
   <engines>
     <engine name="cordova" version=">=3.0.0" />
-    <engine name="cordova-android" version=">=3.0.0" />
+    <engine name="cordova-android" version=">=6.0.0" />
   </engines>
 
   <name>Sumup</name>
@@ -26,7 +26,7 @@
   <platform name="android">
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="Sumup">
-        <param name="android-package" value="com.sumup.cordova.plugins.Sumup" />
+        <param name="android-package" value="com.sumup.cordova.plugin.Sumup" />
         <param name="onload" value="true" />
       </feature>
     </config-file>
@@ -34,14 +34,14 @@
       <string name="SUMUP_API_KEY">$SUMUP_API_KEY</string>
     </config-file>
 
-    <resource-file src="src/android/sdksumup/merchant-sdk-2.3.0.aar" target="libs/merchant-sdk-2.3.0.aar" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <source-file src="src/android/Sumup.java" target-dir="src/com/sumup/cordova/plugins" />
     <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
+    <framework src="com.sumup:merchant-sdk:3.1.1" />
+
+    <source-file src="src/android/Sumup.java" target-dir="src/com/sumup/cordova/plugin" />
   </platform>
 
   <platform name="ios">
@@ -77,8 +77,8 @@
     <header-file src="src/ios/CDVSumup.h" />
     <source-file src="src/ios/CDVSumup.m" />
 
+    <resource-file src="src/ios/SumUpSDK.embeddedframework/Resources/SMPSharedResources.bundle" target="lResources/SMPSharedResources.bundle" />
     <framework src="src/ios/SumupSDK.embeddedframework/SumupSDK.framework" custom="true" />
-    <framework src="src/ios/SumUpSDK.embeddedframework/Resources/SMPSharedResources.bundle" custom="true" embed="true" />
     <framework src="AVFoundation.framework" weak="true" />
     <framework src="Accelerate.framework"  weak="true"/>
     <framework src="MapKit.framework" weak="true" />

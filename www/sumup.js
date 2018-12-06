@@ -42,10 +42,10 @@ Sumup.prototype.pay = function(amount, currencyCode, title, transactionID, skipS
  * @see loginWithToken()
  * @see pay()
  */
-Sumup.prototype.payWithToken = function(token, amount, currencyCode, title, transactionID, receiptEmail, receiptPhone) {
+Sumup.prototype.payWithToken = function(token, amount, currencyCode, title, transactionID, skipSuccessScreen, receiptEmail, receiptPhone) {
   this.loginWithToken(token)
     .then(function() {
-      return this.pay(amount, currencyCode, title, transactionID, receiptEmail, receiptPhone);
+      return this.pay(amount, currencyCode, title, transactionID, skipSuccessScreen, receiptEmail, receiptPhone);
     });
 };
 
