@@ -38,10 +38,16 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
-    <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
-    <framework src="com.sumup:merchant-sdk:3.1.1" />
-
     <source-file src="src/android/Sumup.java" target-dir="src/com/sumup/cordova/plugin" />
+
+    <!-- Fix sumup resources, so AAPT does not complain -->
+    <resource-file src="src/android/res/values/values.xml" target="res/values/values.xml" />
+    <resource-file src="src/android/res/values-es-rCL/values-es-rCL.xml" target="res/values-es-rCL/values-es-rCL.xml" />
+    <resource-file src="src/android/res/values-pt-rBR/values-pt-rBR.xml" target="res/values-pt-rBR/values-pt-rBR.xml" />
+    <resource-file src="src/android/res/values-sk/values-sk.xml" target="res/values-sk/values-sk.xml" />
+    <resource-file src="src/android/res/values-sl/values-sl.xml" target="res/values-sl/values-sl.xml" />
+
+    <framework src="src/android/rules.gradle" custom="true" type="gradleReference" />
   </platform>
 
   <platform name="ios">
