@@ -165,6 +165,12 @@ public class Sumup extends CordovaPlugin {
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    // no intent data given: Sumup activity has been cancelled
+    if (data == null) {
+      callback.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, getErrorMessage(requestCode, resultCode, "Action cancelled")));
+      return;
+    }
+
     Bundle extra = data.getExtras();
     String message = extra.getString(SumUpAPI.Response.MESSAGE);
     int code = extra.getInt(SumUpAPI.Response.RESULT_CODE);

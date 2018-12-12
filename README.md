@@ -29,7 +29,7 @@ functions and their arguments. All API functions are asynchronous and return a
 
 ```js
   // perform a (mandatory) merchant login
-  cordova.SumUp.login()
+  cordova.Sumup.login()
     .then(function(res) {
       /*
       res: {
@@ -42,7 +42,7 @@ functions and their arguments. All API functions are asynchronous and return a
     });
 
   // initiate payment with a SumUp card reader
-  cordova.SumUp.pay(amount, currency (e.g. 'EUR'), title, transactionId)
+  cordova.Sumup.pay(amount, currency (e.g. 'EUR'), title, transactionId)
     .then(function(res) {
       /*
       res: {

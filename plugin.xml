@@ -30,7 +30,7 @@
         <param name="onload" value="true" />
       </feature>
     </config-file>
-    <config-file target="./res/values/strings.xml" parent="/resources">
+    <config-file target="res/values/strings.xml" parent="/resources">
       <string name="SUMUP_API_KEY">$SUMUP_API_KEY</string>
     </config-file>
 
