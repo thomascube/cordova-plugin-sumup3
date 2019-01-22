@@ -51,6 +51,8 @@ public class Sumup extends CordovaPlugin {
           login(callbackContext);
         } else if (action.equals("logout")) {
           logout(callbackContext);
+        } else if (action.equals("isLoggedIn")) {
+          isLoggedIn(callbackContext);
         } else if (action.equals("settings")) {
           settings(callbackContext);
         }
@@ -153,6 +155,10 @@ public class Sumup extends CordovaPlugin {
   private void logout(final CallbackContext callbackContext) {
     SumUpAPI.logout();
     callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, true));
+  }
+
+  private void isLoggedIn(final CallbackContext callbackContext) {
+    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, SumUpAPI.isLoggedIn()));
   }
 
   private void settings(final CallbackContext callbackContext) {

@@ -3,7 +3,8 @@
 var PLUGIN_NAME = 'Sumup';
 
 var Sumup = function() {
-  this.isLogggedIn = false;
+  this._isLoggedIn = false;
+  this._tokenExpiresTimer = null;
 };
 
 var wrapError = function(err) {
@@ -32,7 +33,12 @@ var wrapError = function(err) {
 Sumup.prototype.pay = function(amount, currencyCode, title, transactionID, skipSuccessScreen, receiptEmail, receiptPhone) {
   return new Promise(function(resolve, reject) {
     cordova.exec(resolve, function(err){ reject(wrapError(err)); }, PLUGIN_NAME, 'pay', [String(amount), currencyCode, title, transactionID, skipSuccessScreen ? 1 : 0, receiptEmail, receiptPhone]);
-  });
+  }).catch(function(err) {
+    if (err.code === 205) {
+      this.logout();  // force (re-)login for next transaction
+    }
+    return Promise.reject(err);
+  }.bind(this));
 };
 
 /**
@@ -74,11 +80,19 @@ Sumup.prototype.loginWithToken = function(token) {
   }).catch(function(err) {
     // catch "Merchant already logged in" errors
     if (err.code === 22) {
-      return Promise.resolve({});
+      return Promise.resolve({resume: true});
     }
+    this._isLoggedIn = false;
     return Promise.reject(err);
-  }).then(function(res) {
-    this.isLogggedIn = true;
+  }.bind(this)).then(function(res) {
+    this._isLoggedIn = true;
+
+    // force logout after 45 minutes to avoid token expiration errors
+    if (!res.resume) {
+      this._tokenExpiresTimer = setTimeout(function() {
+        this.logout();
+      }.bind(this), 2700 * 1000);
+    }
     return res;
   }.bind(this));
 };
@@ -92,7 +106,7 @@ Sumup.prototype.login = function() {
   return new Promise(function(resolve, reject) {
     cordova.exec(resolve, function(err){ reject(wrapError(err)); }, PLUGIN_NAME, 'login', []);
   }).then(function(res) {
-    this.isLogggedIn = true;
+    this._isLoggedIn = true;
     return res;
   }.bind(this));
 };
@@ -103,11 +117,31 @@ Sumup.prototype.login = function() {
  * @return {Promise} 
  */
 Sumup.prototype.logout = function() {
+  if (this._tokenExpiresTimer) {
+    clearTimeout(this._tokenExpiresTimer);
+    this._tokenExpiresTimer = null;
+  }
+
   return new Promise(function(resolve, reject) {
     cordova.exec(resolve, function(err){ reject(wrapError(err)); }, PLUGIN_NAME, 'logout', []);
   }).then(function(res) {
-    this.isLogggedIn = false;
+    this._isLoggedIn = false;
     return res;
+  }.bind(this));
+};
+
+
+/**
+ * Checks if the SDK has a current merchant login
+ *
+ * @return {Promise} resolves if positive, rejects otherwise
+ */
+Sumup.prototype.isLoggedIn = function() {
+  return new Promise(function(resolve, reject) {
+    cordova.exec(resolve, function(err){ reject(wrapError(err)); }, PLUGIN_NAME, 'isLoggedIn', []);
+  }).then(function(res) {
+    this._isLoggedIn = res;
+    return res ? Promise.resolve(true) : Promise.reject(new Error('Not logged in'));
   }.bind(this));
 };
 

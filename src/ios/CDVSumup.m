@@ -145,6 +145,12 @@
     }];
 }
 
+- (void)isLoggedIn:(CDVInvokedUrlCommand*)command
+{
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:SMPSumUpSDK.isLoggedIn];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 - (void)settings:(CDVInvokedUrlCommand*)command
 {
     [SMPSumUpSDK presentCheckoutPreferencesFromViewController:self.viewController animated:YES completion:^(BOOL success, NSError *error) {
