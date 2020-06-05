@@ -11,41 +11,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/*
- *  Currency codes to be used in checkout (ISO 4217 code).
- *  Other currency codes are permissible in the request object,
- *  but are likely not to be accepted during the checkout.
- */
-
-NS_SWIFT_NAME(CurrencyCodeBGN)
-extern NSString * const SMPCurrencyCodeBGN;
-NS_SWIFT_NAME(CurrencyCodeBRL)
-extern NSString * const SMPCurrencyCodeBRL;
-NS_SWIFT_NAME(CurrencyCodeCHF)
-extern NSString * const SMPCurrencyCodeCHF;
-NS_SWIFT_NAME(CurrencyCodeCLP)
-extern NSString * const SMPCurrencyCodeCLP;
-NS_SWIFT_NAME(CurrencyCodeCZK)
-extern NSString * const SMPCurrencyCodeCZK;
-NS_SWIFT_NAME(CurrencyCodeDKK)
-extern NSString * const SMPCurrencyCodeDKK;
-NS_SWIFT_NAME(CurrencyCodeEUR)
-extern NSString * const SMPCurrencyCodeEUR;
-NS_SWIFT_NAME(CurrencyCodeGBP)
-extern NSString * const SMPCurrencyCodeGBP;
-NS_SWIFT_NAME(CurrencyCodeHUF)
-extern NSString * const SMPCurrencyCodeHUF;
-NS_SWIFT_NAME(CurrencyCodeNOK)
-extern NSString * const SMPCurrencyCodeNOK;
-NS_SWIFT_NAME(CurrencyCodePLN)
-extern NSString * const SMPCurrencyCodePLN;
-NS_SWIFT_NAME(CurrencyCodeRON)
-extern NSString * const SMPCurrencyCodeRON;
-NS_SWIFT_NAME(CurrencyCodeSEK)
-extern NSString * const SMPCurrencyCodeSEK;
-NS_SWIFT_NAME(CurrencyCodeUSD)
-extern NSString * const SMPCurrencyCodeUSD;
-
 typedef NS_OPTIONS (NSUInteger, SMPPaymentOptions) {
     SMPPaymentOptionAny = 0,
     SMPPaymentOptionCardReader = 1 << 0,
@@ -131,6 +96,14 @@ NS_SWIFT_NAME(CheckoutRequest)
  *  @note Will be added to the totalAmount. Must be greater zero if passed.
  */
 @property (nonatomic, copy, nullable) NSDecimalNumber *tipAmount;
+
+/**
+ *  An optional count for the display of the number of sale items throughout the checkout process.
+ *  Default is zero which will hide the display of the item count.
+ *  This value is currently not reflected in the merchant's history
+ *  or the customer receipts.
+ */
+@property (nonatomic) NSUInteger saleItemsCount;
 
 
 /**
