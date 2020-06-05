@@ -63,6 +63,9 @@
     <config-file target="*-Info.plist" parent="NSBluetoothPeripheralUsageDescription">
       <string>Required to connect with SumUp card reader. If denied, you cannot use your card reader.</string>
     </config-file>
+    <config-file target="*-Info.plist" parent="NSBluetoothAlwaysUsageDescription">
+      <string>Required to connect with SumUp card reader. If denied, you cannot use your card reader.</string>
+    </config-file>
     <config-file target="*-Info.plist" parent="NSMicrophoneUsageDescription">
       <string>Access to the microphone or your audio jack is required for the SumUp card reader to be detected correctly. If denied, you cannot use your card reader.</string>
     </config-file>
