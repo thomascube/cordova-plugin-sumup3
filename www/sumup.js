@@ -1,10 +1,11 @@
 'use strict';
 
 var PLUGIN_NAME = 'Sumup';
+var SUMUP_TOKEN_TTL = 1800 * 1000;  // 30 minutes
 
 var Sumup = function() {
   this._isLoggedIn = false;
-  this._tokenExpiresTimer = null;
+  this._lastLoginTime = null;
 };
 
 var wrapError = function(err) {
@@ -86,13 +87,7 @@ Sumup.prototype.loginWithToken = function(token) {
     return Promise.reject(err);
   }.bind(this)).then(function(res) {
     this._isLoggedIn = true;
-
-    // force logout after 45 minutes to avoid token expiration errors
-    if (!res.resume) {
-      this._tokenExpiresTimer = setTimeout(function() {
-        this.logout();
-      }.bind(this), 2700 * 1000);
-    }
+    this._lastLoginTime = new Date().getTime();
     return res;
   }.bind(this));
 };
@@ -107,6 +102,7 @@ Sumup.prototype.login = function() {
     cordova.exec(resolve, function(err){ reject(wrapError(err)); }, PLUGIN_NAME, 'login', []);
   }).then(function(res) {
     this._isLoggedIn = true;
+    this._lastLoginTime = new Date().getTime();;
     return res;
   }.bind(this));
 };
@@ -117,15 +113,11 @@ Sumup.prototype.login = function() {
  * @return {Promise} 
  */
 Sumup.prototype.logout = function() {
-  if (this._tokenExpiresTimer) {
-    clearTimeout(this._tokenExpiresTimer);
-    this._tokenExpiresTimer = null;
-  }
-
   return new Promise(function(resolve, reject) {
     cordova.exec(resolve, function(err){ reject(wrapError(err)); }, PLUGIN_NAME, 'logout', []);
   }).then(function(res) {
     this._isLoggedIn = false;
+    this._lastLoginTime = null;
     return res;
   }.bind(this));
 };
@@ -140,8 +132,9 @@ Sumup.prototype.isLoggedIn = function() {
   return new Promise(function(resolve, reject) {
     cordova.exec(resolve, function(err){ reject(wrapError(err)); }, PLUGIN_NAME, 'isLoggedIn', []);
   }).then(function(res) {
-    this._isLoggedIn = res;
-    return res ? Promise.resolve(true) : Promise.reject(new Error('Not logged in'));
+    // check login token expiration even though the system reports `isLoggedIn`
+    this._isLoggedIn = res && !(this._lastLoginTime && this._lastLoginTime < new Date().getTime() - SUMUP_TOKEN_TTL);
+    return this._isLoggedIn ? Promise.resolve(true) : Promise.reject(new Error('Not logged in'));
   }.bind(this));
 };
 

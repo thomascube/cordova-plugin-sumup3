@@ -155,7 +155,7 @@
 {
     [SMPSumUpSDK presentCheckoutPreferencesFromViewController:self.viewController animated:YES completion:^(BOOL success, NSError *error) {
         CDVPluginResult* pluginResult = nil;
-        
+
         if (success) {
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
         } else {
@@ -172,15 +172,19 @@
 {
     SMPMerchant *merchant = [SMPSumUpSDK currentMerchant];
     NSDictionary *info = @{
-                           @"merchantCode": [merchant merchantCode],
-                           @"currencyCode": [merchant currencyCode]
-                           };
-    
+        @"merchantCode": [merchant merchantCode],
+        @"currencyCode": [merchant currencyCode]
+    };
+
     return info;
 }
 
 - (NSString*)getErrorMessage:(NSError*)error
 {
+    if (error.localizedDescription && [error.localizedDescription length] > 0) {
+        return error.localizedDescription;
+    }
+
     switch (error.code) {
         case SMPSumUpSDKErrorActivationNeeded:
         return @"Activation needed";
